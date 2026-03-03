@@ -90,5 +90,15 @@ public:
 	/** Returns first person camera component **/
 	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
 
+public:
+	//함수
+	void SetIsDead(bool bNewDead) { bIsDead = bNewDead; }
+	FORCEINLINE bool IsDead() const { return bIsDead; }
+
+private:
+	//변수
+	bool bIsDead = false;
+
+
 };
 

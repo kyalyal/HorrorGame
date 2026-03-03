@@ -11,6 +11,7 @@
 /**
  * 
  */
+
 UCLASS()
 class HORRORGAME_API UHorrorDirectorSubsystem : public UWorldSubsystem
 {
@@ -20,4 +21,9 @@ public:
 
 	//이벤트를 실행시켜줄 매개체
 	void HorrorEvent(const FHorrorEvent& HorrorEvent);
+
+private:
+
+	UPROPERTY()
+	TArray<TObjectPtr<class UHorrorAction>> ActiveAction;
 };
