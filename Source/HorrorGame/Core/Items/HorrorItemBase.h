@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Info/HorrorEventInfo.h"
+
 #include "HorrorItemBase.generated.h"
 
 UCLASS()
@@ -22,5 +24,12 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+public:
+
+	void HorrorEventCheck(EHorrorEventCheck Check);
+
+	UPROPERTY(EditAnywhere)
+	TArray<FHorrorEventsMaster> HorrorEvents;
 
 };

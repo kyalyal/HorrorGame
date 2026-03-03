@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Info/HE_Player.h"
+
 #include "HorrorEventInfo.generated.h" //여기 뭐가 있구나...
 
 
@@ -22,6 +24,8 @@ struct FHorrorEvent
 public:
 
 	//Player
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Horror Event")
+	FHE_Player Player;
 	//Sound
 	//...
 };
@@ -41,6 +45,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Horror Event")
 	int32 Counter;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Horror Event")
+	bool DoOnce;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Horror Event")
 	FHorrorEvent HorrorEvent;
