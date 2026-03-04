@@ -3,3 +3,7 @@
 
 #include "HorrorEvent/HorrorAction.h"
 
+void UHorrorAction::Finish()
+{
+	OnActionFinished.Broadcast(this);
+}

@@ -22,6 +22,9 @@ public:
 	//이벤트를 실행시켜줄 매개체
 	void HorrorEvent(const FHorrorEvent& HorrorEvent);
 
+	UFUNCTION()
+	void OnActionFinished(class UHorrorAction* FinishedAction);
+
 private:
 
 	UPROPERTY()
