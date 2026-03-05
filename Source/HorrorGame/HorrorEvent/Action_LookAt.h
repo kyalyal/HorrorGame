@@ -22,4 +22,24 @@ public:
 
 	UFUNCTION()
 	void LookAtActor(const FHE_Player& InPlayerData);
+
+protected:
+	UFUNCTION()
+	void StartSequence();
+
+	UFUNCTION()
+	void UpdateRotation();
+
+private:
+
+	FHE_Player MyData;
+
+	FRotator StartRotation;
+	FRotator TargetRotation;
+	float CurrentAlpha = 0.0f;
+
+	//조종간. 매니저
+	FTimerHandle ActionTimerHandle;
+	FTimerHandle StartDelayTimerHandle;
+
 };
