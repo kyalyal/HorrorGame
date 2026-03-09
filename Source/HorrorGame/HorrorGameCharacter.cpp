@@ -9,6 +9,8 @@
 #include "InputActionValue.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "HorrorGame.h"
+#include "Kismet/KismetSystemLibrary.h"
+#include "Core/Items/LookTrigger.h"
 
 AHorrorGameCharacter::AHorrorGameCharacter()
 {
@@ -44,6 +46,77 @@ AHorrorGameCharacter::AHorrorGameCharacter()
 	GetCharacterMovement()->AirControl = 0.5f;
 }
 
+void AHorrorGameCharacter::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	UpdateLookAtTarget();
+
+}
+
+void AHorrorGameCharacter::UpdateLookAtTarget()
+{
+	FVector StartPoint = FirstPersonCameraComponent->GetComponentLocation();
+	FVector EndPoint = (FirstPersonCameraComponent->GetForwardVector() * 10000) + StartPoint;
+
+	FHitResult HitResult;
+	TArray<AActor*> ActorToIgnore;
+	ActorToIgnore.Add(this);
+
+	UKismetSystemLibrary::LineTraceSingle(
+		GetWorld(),
+		StartPoint,
+		EndPoint,
+		UEngineTypes::ConvertToTraceType(ECC_Visibility),
+		true,
+		ActorToIgnore,
+		EDrawDebugTrace::ForDuration,
+		HitResult,
+		true,
+		FLinearColor::Red,
+		FLinearColor::Green,
+		1.f
+	);
+
+	if (HitResult.bBlockingHit)
+	{
+		ALookTrigger* NewTarget = Cast<ALookTrigger>(HitResult.GetActor());
+
+		if (NewTarget)
+		{
+			float CameraDistance = (HitResult.Location - FirstPersonCameraComponent->GetComponentLocation()).Length();
+			if (CameraDistance < NewTarget->GetMaxLookingDistance())
+			{
+				//새로운 대상을 바라본 경우
+				if (CurrentLookTarget != NewTarget)
+				{
+					if (CurrentLookTarget)
+					{
+						CurrentLookTarget->ResetLooking();
+					}
+
+					CurrentLookTarget = NewTarget;
+				}
+
+				//바라보기
+				CurrentLookTarget->Looking();
+			}
+
+			
+		}
+		else
+		{
+			//무언가 맞았지만 lookTrigger가 아닌 경우
+			ResetCurrentTarget();
+		}
+	}
+	else
+	{
+		//아무것도 맞지 않은 경우.
+		ResetCurrentTarget();
+	}
+}
+
 void AHorrorGameCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {	
 	// Set up action bindings
@@ -63,6 +136,15 @@ void AHorrorGameCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	else
 	{
 		UE_LOG(LogHorrorGame, Error, TEXT("'%s' Failed to find an Enhanced Input Component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
+	}
+}
+
+void AHorrorGameCharacter::ResetCurrentTarget()
+{
+	if (CurrentLookTarget)
+	{
+		CurrentLookTarget->ResetLooking();
+		CurrentLookTarget = nullptr;
 	}
 }
 

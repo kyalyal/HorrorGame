@@ -23,5 +23,5 @@ public:
 	//µ®∏Æ∞‘¿Ã∆Æ
 	FOnActionFinished OnActionFinished;
 
-	void Finish();
+	virtual void Finish();
 };

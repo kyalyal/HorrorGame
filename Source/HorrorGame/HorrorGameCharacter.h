@@ -52,6 +52,10 @@ protected:
 public:
 	AHorrorGameCharacter();
 
+	virtual void Tick(float DeltaSeconds) override;
+
+	void UpdateLookAtTarget();
+
 protected:
 
 	/** Called from Input Actions for movement input */
@@ -95,10 +99,15 @@ public:
 	void SetIsDead(bool bNewDead) { bIsDead = bNewDead; }
 	FORCEINLINE bool IsDead() const { return bIsDead; }
 
+protected:
+
+	void ResetCurrentTarget();
+
 private:
 	//º¯¼ö
 	bool bIsDead = false;
 
-
+	UPROPERTY()
+	TObjectPtr<class ALookTrigger> CurrentLookTarget = nullptr;
 };
 

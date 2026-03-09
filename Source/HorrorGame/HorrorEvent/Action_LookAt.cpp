@@ -3,14 +3,29 @@
 
 #include "HorrorEvent/Action_LookAt.h"
 #include "Kismet/GameplayStatics.h"
-#include "HorrorCharacter.h"
+#include "HorrorGameCharacter.h"
 
 bool UAction_LookAt::CheckHorrorAction()
 {
 	if (!Super::CheckHorrorAction()) return false;
 
-	AHorrorCharacter* PlayerCharacter = Cast<AHorrorCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	return !PlayerCharacter->IsDead();
+	AHorrorGameCharacter* PlayerCharacter = Cast<AHorrorGameCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	return PlayerCharacter && !PlayerCharacter->IsDead();
+}
+
+void UAction_LookAt::Finish()
+{
+	//타이머 지우기
+	GetWorld()->GetTimerManager().ClearTimer(ActionTimerHandle);
+	GetWorld()->GetTimerManager().ClearTimer(StartDelayTimerHandle);
+
+	if (APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0))
+	{
+		PC->SetIgnoreLookInput(false);
+		PC->SetIgnoreMoveInput(false);
+	}
+
+	Super::Finish();
 }
 
 void UAction_LookAt::LookAtActor(const FHE_Player& InPlayerData)

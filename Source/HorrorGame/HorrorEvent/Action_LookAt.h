@@ -20,6 +20,8 @@ class HORRORGAME_API UAction_LookAt : public UHorrorAction
 public:
 	virtual bool CheckHorrorAction() override;
 
+	virtual void Finish() override;
+
 	UFUNCTION()
 	void LookAtActor(const FHE_Player& InPlayerData);
 
